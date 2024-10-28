@@ -1,18 +1,30 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../Main/User.css"
+import axios from "axios"
 
 const UserManagement = () => {
-  const [employees, setEmployees] = useState([
-    { id: 1, name: "Thomas Hardy", email: "thomas@example.com", address: "89 Chiaroscuro Rd, Portland, USA", phone: "(171) 555-2222" },
-    { id: 2, name: "Dominique Perrier", email: "dominique@example.com", address: "Obere Str. 57, Berlin, Germany", phone: "(313) 555-5735" },
-    { id: 3, name: "Maria Anders", email: "maria@example.com", address: "25, rue Lauriston, Paris, France", phone: "(503) 555-9931" },
-    { id: 4, name: "Fran Wilson", email: "fran@example.com", address: "C/ Araquil, 67, Madrid, Spain", phone: "(204) 619-5731" },
-    { id: 5, name: "Martin Blank", email: "martin@example.com", address: "Via Monte Bianco 34, Turin, Italy", phone: "(480) 631-2097" },
-  ]);
+  const [employees, setEmployees] = useState([]);
   const [selectedEmployee, setSelectedEmployee] = useState(null);
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+
+
+  useEffect(()=>{
+    const fetchData = async()=>{
+        const response = await axios.get("http://localhost:8080/api/users",
+          {
+            headers:{
+              "Content-Type":"application/json"
+            }
+          }
+
+        )
+        console.log("check",response.data);
+        setEmployees(response.data);
+    }
+    fetchData();
+  },[])
 
   const openAddModal = () => setShowAddModal(true);
   const closeAddModal = () => setShowAddModal(false);
@@ -74,20 +86,18 @@ const UserManagement = () => {
           <table className="table table-striped table-hover">
             <thead>
               <tr>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Address</th>
-                <th>Phone</th>
-                <th>Actions</th>
+                <th>ID</th>
+                <th>Username</th>
+                <th>Password</th>
+
               </tr>
             </thead>
             <tbody>
               {employees.map((employee) => (
-                <tr key={employee.id}>
-                  <td>{employee.name}</td>
-                  <td>{employee.email}</td>
-                  <td>{employee.address}</td>
-                  <td>{employee.phone}</td>
+                <tr key={employee.userId}>
+                  <td>{employee.userId}</td>
+                  <td>{employee.username}</td>
+                  <td>{employee.password}</td>
                   <td>
                     <button onClick={() => openEditModal(employee)} className="edit"><i className="material-icons" title="Edit">&#xE254;</i></button>
                     <button onClick={() => openDeleteModal(employee)} className="delete"><i className="material-icons" title="Delete">&#xE872;</i></button>
