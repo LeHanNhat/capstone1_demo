@@ -3,13 +3,13 @@ import "../Main/User.css"
 import axios from "axios"
 
 const UserManagement = () => {
-  const [employees, setEmployees] = useState([]);
-  const [selectedEmployee, setSelectedEmployee] = useState(null);
+  const [users, setUsers] = useState([]);
+  const [selectedUser, setSelectedUser] = useState(null);
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showDetailModal, setDetailModal] = useState(false);
-  console.log(selectedEmployee);
+  console.log(selectedUser);
 
 
 
@@ -24,14 +24,14 @@ const UserManagement = () => {
 
       )
       console.log("check", response.data);
-      setEmployees(response.data);
+      setUsers(response.data);
     }
     fetchData();
   }, [])
   const openDetailModal = async () => {
     setDetailModal(true);
     try {
-      const response = await axios.get(`http://localhost:8080/api/user/${selectedEmployee.userId}`, {
+      const response = await axios.get(`http://localhost:8080/api/user/${selectedUser.userId}`, {
         headers: {
           "Content-Type": "application/json",
         },
@@ -76,7 +76,7 @@ const UserManagement = () => {
         },
 
       )
-      setEmployees([...employees, {
+      setUsers([...users, {
         ...newEmployee,
         userId: response.data.userId
       }]);
@@ -91,11 +91,11 @@ const UserManagement = () => {
   const handleEditEmployee = async (e) => {
     e.preventDefault();
 
-    const updateEmployee = { ...selectedEmployee, username: e.target.username.value, password: e.target.password.value }
-    console.log("check update ", selectedEmployee);
+    const updateEmployee = { ...selectedUser, username: e.target.username.value, password: e.target.password.value }
+    console.log("check update ", selectedUser);
 
     try {
-      const response = await axios.put(`http://localhost:8080/api/users/${selectedEmployee.userId}`,
+      const response = await axios.put(`http://localhost:8080/api/users/${selectedUser.userId}`,
         updateEmployee, {
         headers: {
           "Content-Type": "application/json"
@@ -103,9 +103,9 @@ const UserManagement = () => {
       }
       )
       console.log("check update", response.data);
-      setEmployees(
-        employees.map((emp) =>
-          emp.userId === selectedEmployee.userId ? { ...selectedEmployee, ...{ username: e.target.username.value, password: e.target.password.value } } : emp
+      setUsers(
+        users.map((emp) =>
+          emp.userId === selectedUser.userId ? { ...selectedUser, ...{ username: e.target.username.value, password: e.target.password.value } } : emp
         )
       );
       closeEditModal();
@@ -120,7 +120,7 @@ const UserManagement = () => {
 
   const handleDeleteEmployee = async () => {
     try {
-      const response = await axios.delete(`http://localhost:8080/api/users/${selectedEmployee.userId}`,
+      const response = await axios.delete(`http://localhost:8080/api/users/${selectedUser.userId}`,
         {
           headers: {
             "Content-Type": "application/json"
@@ -132,7 +132,7 @@ const UserManagement = () => {
     } catch (error) {
       console.log(err);
     }
-    setEmployees(employees.filter((emp) => emp.userId !== selectedEmployee.userId));
+    setUsers(users.filter((emp) => emp.userId !== selectedUser.userId));
     closeDeleteModal();
   };
 
@@ -160,11 +160,11 @@ const UserManagement = () => {
               </tr>
             </thead>
             <tbody>
-              {employees.map((employee, index) => (
-                <tr key={employees.userId} onClick={() => setSelectedEmployee(employee)}>
-                  <td>{employee.userId}</td>
-                  <td>{employee.username}</td>
-                  <td>{employee.password}</td>
+              {users.map((employee, index) => (
+                <tr key={users.userId} onClick={() =>setSelectedUser(employee)}>
+                  <td onClick={openDetailModal}>{employee.userId}</td>
+                  <td onClick={openDetailModal}>{employee.username}</td>
+                  <td onClick={openDetailModal}>{employee.password}</td>
                   <td>
                     <button onClick={() => openEditModal()} className="edit"><i className="material-icons" title="Edit">Edit</i></button>
                     <button onClick={() => openDeleteModal()} className="delete"><i className="material-icons" title="Delete">X</i></button>
@@ -207,9 +207,9 @@ const UserManagement = () => {
             <th>Password</th>
           </tr>
           <tr>
-            <td>{selectedEmployee.userId}</td>
-            <td>{selectedEmployee.username}</td>
-            <td>{selectedEmployee.password}</td>
+            <td>{selectedUser.userId}</td>
+            <td>{selectedUser.username}</td>
+            <td>{selectedUser.password}</td>
             <td>
               <button onClick={() => closeDetailModal()} className="edit"><i className="material-icons" title="Detail">Ok</i></button>
             </td>
@@ -225,10 +225,10 @@ const UserManagement = () => {
           <form onSubmit={handleEditEmployee}>
             <h4>Edit Employee</h4>
             <label htmlFor="username">Username:</label>
-            <input type="text" name="username" defaultValue={selectedEmployee.username} id="username" required />
+            <input type="text" name="username" defaultValue={selectedUser.username} id="username" required />
             <br />
             <label htmlFor="password">Password:</label>
-            <input type="password" name="password" defaultValue={selectedEmployee.password} id="password" required />
+            <input type="password" name="password" defaultValue={selectedUser.password} id="password" required />
             <div className="buttonGroup">
               <button type="submit">Save</button>
               <button onClick={closeEditModal}>Cancel</button>
@@ -238,9 +238,9 @@ const UserManagement = () => {
       )}
       {showDeleteModal && (
         <div className="modalImp">
-          {selectedEmployee ? (
+          {selectedUser ? (
             <div>
-              <p>Are you sure you want to delete <span className="userDelete">{selectedEmployee?.username}?</span></p>
+              <p>Are you sure you want to delete <span className="userDelete">{selectedUser?.username}?</span></p>
               <div className="buttonGroup">
                 <button onClick={handleDeleteEmployee}>Delete</button>
                 <button onClick={closeDeleteModal}>Cancel</button>
