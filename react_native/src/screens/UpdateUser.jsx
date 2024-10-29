@@ -42,7 +42,7 @@ export default function UpdateUserScreen() {
     <View style={{flex: 1}}>
       <TextInput label="Username" value={username} onChangeText={setUsername} />
       <TextInput label="Password" value={password} onChangeText={setPassword} />
-      <Button onPress={handleClick}>Add User</Button>
+      <Button mode='outlined' onPress={handleClick}>Update User</Button>
     </View>
   );
 }

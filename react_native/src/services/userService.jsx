@@ -2,7 +2,7 @@ import axios from 'axios';
 
 axios.defaults.headers.common['Content-Type'] = 'application/json';
 
-const host = 'http://10.0.2.2:8080/api/users';
+const host = `${process.env.SERVER_HOST}/api/users`;
 
 export const getAllUser = async () => {
   try {
