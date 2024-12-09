@@ -1,9 +1,9 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useEffect, useState} from 'react';
-import {getUserById, updateUser} from '../services/userService';
-import {Alert, View} from 'react-native';
-import {ActivityIndicator, Button, TextInput} from 'react-native-paper';
 import {useNavigation, useRoute} from '@react-navigation/native';
+import React, {useEffect, useState} from 'react';
+import {View} from 'react-native';
+import {ActivityIndicator, Button, TextInput} from 'react-native-paper';
+import {getUserById, updateUser} from '../services/userService';
 
 export default function UpdateUserScreen() {
   const route = useRoute();
@@ -14,8 +14,7 @@ export default function UpdateUserScreen() {
   const [loading, setLoading] = useState(true);
 
   const handleClick = async () => {
-    const newUser = await updateUser(userId, {username, password});
-    Alert.alert('New User', newUser);
+    await updateUser(userId, {username, password});
     navigation.navigate('users');
   };
 
@@ -42,7 +41,9 @@ export default function UpdateUserScreen() {
     <View style={{flex: 1}}>
       <TextInput label="Username" value={username} onChangeText={setUsername} />
       <TextInput label="Password" value={password} onChangeText={setPassword} />
-      <Button mode='outlined' onPress={handleClick}>Update User</Button>
+      <Button mode="outlined" onPress={handleClick}>
+        Update User
+      </Button>
     </View>
   );
 }

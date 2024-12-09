@@ -1,9 +1,9 @@
 /* eslint-disable react-native/no-inline-styles */
-import {useNavigation, useRoute} from '@react-navigation/native';
-import React, {useEffect, useState} from 'react';
-import {Alert, View} from 'react-native';
-import {ActivityIndicator, Button, Card, Text} from 'react-native-paper';
-import {deleteUser, getUserById} from '../services/userService';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import React, { useEffect, useState } from 'react';
+import { View } from 'react-native';
+import { ActivityIndicator, Button, Card, Text } from 'react-native-paper';
+import { deleteUser, getUserById } from '../services/userService';
 
 export default function UserDetail() {
   const navigation = useNavigation();
@@ -48,7 +48,6 @@ export default function UserDetail() {
           style={{backgroundColor: 'red'}}
           onPress={async () => {
             await deleteUser(userId);
-            Alert.alert('delete ok!');
             navigation.navigate('users');
           }}>
           Delete
